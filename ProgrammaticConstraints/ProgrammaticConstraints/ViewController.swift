@@ -46,11 +46,32 @@ class ViewController: UIViewController {
     }
     
     func buttonTapped() {
+        let topLeftColor = topLeftButton.backgroundColor
+        let topRightColor = topRightButton.backgroundColor
+        let bottomLeftColor = bottomLeftButton.backgroundColor
+        let bottomRightColor = bottomRightButton.backgroundColor
         
+        UIView.animate(withDuration: 1.0) { 
+            self.topLeftButton.backgroundColor = bottomLeftColor
+            self.topRightButton.backgroundColor = topLeftColor
+            self.bottomLeftButton.backgroundColor = bottomRightColor
+            self.bottomRightButton.backgroundColor = topRightColor
+        }
     }
     
     func buttonExited(_ sender: UIButton) {
-        
+        view.bringSubview(toFront: sender)
+        let animation = CAKeyframeAnimation()
+        animation.keyPath = "position.x"
+        animation.values = [sender.frame.origin.x + sender.frame.width / 2,
+                            sender.frame.origin.x + sender.frame.width / 2 - 15,
+                            sender.frame.origin.x + sender.frame.width / 2,
+                            sender.frame.origin.x + sender.frame.width / 2 + 15,
+                            sender.frame.origin.x + sender.frame.width / 2]
+        animation.keyTimes = [0, 0.25, 0.5, 0.75, 1]
+        animation.duration = 0.5
+        animation.repeatCount = 5
+        sender.layer.add(animation, forKey: "shake")
     }
     
     func setupConstraints() {
